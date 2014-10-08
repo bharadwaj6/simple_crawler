@@ -62,15 +62,25 @@ def crawl(url, max_level=2):
 def download_links(link_name):
     """
     Downloads all the links previously crawled by the crawler function
-    to the download directory.
+    to the download directory. Also outputs the links to the 'download_links' file.
     """
+    success_links = []
     for link in link_name:
         name = str(link_name[link])
         location = "downloads/" + name + ".html"
         try:
             urllib.urlretrieve(link, location)
+            # only add the links that can be successfully downloaded to the list in file.
+            success_links.append(str(link))
         except IOError:
             pass
+
+    # write downloaded links to a download_links file
+    with open('download_links', 'w') as f:
+        for item in success_links:
+            line = str(item) + "\n"
+            f.write(line)
+
     return
 
 
